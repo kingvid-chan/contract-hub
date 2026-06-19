@@ -1,0 +1,88 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.13, pytest-9.1.0, pluggy-1.6.0 -- /Users/cqw/miniconda3/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/cqw/外部需求/proj-d9ec29
+plugins: anyio-4.12.1, flask-1.3.0, cov-7.1.0, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 50 items
+
+tests/test_api.py::TestHealth::test_healthz PASSED                       [  2%]
+tests/test_api.py::TestAuth::test_login_admin PASSED                     [  4%]
+tests/test_api.py::TestAuth::test_login_user PASSED                      [  6%]
+tests/test_api.py::TestAuth::test_login_wrong_password PASSED            [  8%]
+tests/test_api.py::TestAuth::test_login_nonexistent_user PASSED          [ 10%]
+tests/test_api.py::TestAuth::test_me_authenticated PASSED                [ 12%]
+tests/test_api.py::TestAuth::test_me_unauthenticated PASSED              [ 14%]
+tests/test_api.py::TestAuth::test_me_invalid_token PASSED                [ 16%]
+tests/test_api.py::TestUsers::test_list_users_admin PASSED               [ 18%]
+tests/test_api.py::TestUsers::test_list_users_forbidden PASSED           [ 20%]
+tests/test_api.py::TestUsers::test_create_user_admin PASSED              [ 22%]
+tests/test_api.py::TestUsers::test_create_duplicate_username PASSED      [ 24%]
+tests/test_api.py::TestUsers::test_create_user_short_password PASSED     [ 26%]
+tests/test_api.py::TestUsers::test_get_user_admin PASSED                 [ 28%]
+tests/test_api.py::TestUsers::test_get_nonexistent_user PASSED           [ 30%]
+tests/test_api.py::TestUsers::test_update_user_admin PASSED              [ 32%]
+tests/test_api.py::TestUsers::test_delete_user_admin PASSED              [ 34%]
+tests/test_api.py::TestUsers::test_user_cannot_access_users PASSED       [ 36%]
+tests/test_api.py::TestContracts::test_list_contracts_admin PASSED       [ 38%]
+tests/test_api.py::TestContracts::test_list_contracts_filter_status PASSED [ 40%]
+tests/test_api.py::TestContracts::test_user_sees_only_own_contracts PASSED [ 42%]
+tests/test_api.py::TestContracts::test_create_contract PASSED            [ 44%]
+tests/test_api.py::TestContracts::test_get_contract PASSED               [ 46%]
+tests/test_api.py::TestContracts::test_get_nonexistent_contract PASSED   [ 48%]
+tests/test_api.py::TestContracts::test_user_cannot_see_others_contract PASSED [ 50%]
+tests/test_api.py::TestContracts::test_update_draft_contract PASSED      [ 52%]
+tests/test_api.py::TestContracts::test_cannot_update_non_draft PASSED    [ 54%]
+tests/test_api.py::TestContracts::test_delete_draft_contract PASSED      [ 56%]
+tests/test_api.py::TestContracts::test_cannot_delete_non_draft PASSED    [ 58%]
+tests/test_api.py::TestStateMachine::test_submit_draft_to_pending PASSED [ 60%]
+tests/test_api.py::TestStateMachine::test_approve_pending_to_active PASSED [ 62%]
+tests/test_api.py::TestStateMachine::test_reject_pending_to_draft PASSED [ 64%]
+tests/test_api.py::TestStateMachine::test_terminate_active_to_terminated PASSED [ 66%]
+tests/test_api.py::TestStateMachine::test_non_admin_cannot_approve PASSED [ 68%]
+tests/test_api.py::TestStateMachine::test_invalid_transition_approve_draft PASSED [ 70%]
+tests/test_api.py::TestStateMachine::test_invalid_transition_submit_active PASSED [ 72%]
+tests/test_api.py::TestStateMachine::test_full_happy_path PASSED         [ 74%]
+tests/test_api.py::TestStateMachine::test_submit_own_contract PASSED     [ 76%]
+tests/test_api.py::TestAttachments::test_upload_pdf PASSED               [ 78%]
+tests/test_api.py::TestAttachments::test_upload_docx PASSED              [ 80%]
+tests/test_api.py::TestAttachments::test_reject_exe_disguised_as_pdf PASSED [ 82%]
+tests/test_api.py::TestAttachments::test_reject_bad_extension PASSED     [ 84%]
+tests/test_api.py::TestAttachments::test_download_attachment PASSED      [ 86%]
+tests/test_api.py::TestAttachments::test_delete_attachment PASSED        [ 88%]
+tests/test_api.py::TestAttachments::test_user_can_download_own_attachment PASSED [ 90%]
+tests/test_api.py::TestAttachments::test_user_cannot_download_others_attachment PASSED [ 92%]
+tests/test_api.py::TestAttachments::test_download_unauthenticated PASSED [ 94%]
+tests/test_api.py::TestCacheHeaders::test_html_no_cache PASSED           [ 96%]
+tests/test_api.py::TestCacheHeaders::test_api_no_store PASSED            [ 98%]
+tests/test_api.py::TestCacheHeaders::test_js_long_cache PASSED           [100%]
+
+=============================== warnings summary ===============================
+backend/main.py:91
+  /Users/cqw/外部需求/proj-d9ec29/backend/main.py:91: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+../../miniconda3/lib/python3.13/site-packages/fastapi/applications.py:4495
+  /Users/cqw/miniconda3/lib/python3.13/site-packages/fastapi/applications.py:4495: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+tests/test_api.py: 129 warnings
+  /Users/cqw/miniconda3/lib/python3.13/site-packages/sqlalchemy/sql/schema.py:3596: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    return util.wrap_callable(lambda ctx: fn(), fn)  # type: ignore
+
+tests/test_api.py: 46 warnings
+  /Users/cqw/miniconda3/lib/python3.13/site-packages/jose/jwt.py:311: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = timegm(datetime.utcnow().utctimetuple())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+====================== 50 passed, 177 warnings in 16.65s =======================
