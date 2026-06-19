@@ -5,6 +5,8 @@ import uuid
 from pathlib import Path
 
 import filetype
+from urllib.parse import quote
+
 from fastapi import APIRouter, Depends, File, Form, HTTPException, status, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
@@ -138,10 +140,14 @@ def download_attachment(
             status_code=status.HTTP_404_NOT_FOUND, detail="File not found on disk"
         )
 
+    encoded_filename = quote(att.original_name)
     return FileResponse(
         path=att.file_path,
         filename=att.original_name,
         media_type=att.content_type,
+        headers={
+            "Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}",
+        },
     )
 
 
