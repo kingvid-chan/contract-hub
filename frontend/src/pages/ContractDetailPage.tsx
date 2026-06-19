@@ -41,6 +41,7 @@ import {
   terminateContract,
   uploadAttachment,
   deleteAttachment,
+  downloadAttachment,
   ContractInfo,
   AttachmentInfo,
 } from "../api";
@@ -163,6 +164,15 @@ export default function ContractDetailPage() {
     } catch (err: unknown) {
       const apiErr = err as { detail?: string };
       message.error(apiErr?.detail || "删除失败");
+    }
+  };
+
+  const handleDownload = async (att: AttachmentInfo) => {
+    try {
+      await downloadAttachment(att.id, att.original_name);
+    } catch (err: unknown) {
+      const apiErr = err as { detail?: string };
+      message.error(apiErr?.detail || "下载失败");
     }
   };
 
@@ -371,8 +381,7 @@ export default function ContractDetailPage() {
                   <Button
                     type="link"
                     icon={<DownloadOutlined />}
-                    href={`/projects/contract-hub/api/attachments/${att.id}`}
-                    target="_blank"
+                    onClick={() => handleDownload(att)}
                     key="download"
                   >
                     下载
