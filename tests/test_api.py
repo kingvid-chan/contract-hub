@@ -468,6 +468,8 @@ class TestAttachments:
         )
         assert download_resp.status_code == 200
         assert download_resp.headers.get("content-type") == "application/pdf"
+        content_disp = download_resp.headers.get("content-disposition", "")
+        assert "attachment" in content_disp, f"Expected attachment, got: {content_disp}"
 
     def test_delete_attachment(self, client, admin_headers, draft_contract):
         """Upload then delete an attachment."""
@@ -540,6 +542,8 @@ class TestAttachments:
         )
         assert resp.status_code == 200
         assert resp.headers.get("content-type") == "application/pdf"
+        content_disp = resp.headers.get("content-disposition", "")
+        assert "attachment" in content_disp, f"Expected attachment, got: {content_disp}"
 
     def test_user_cannot_download_others_attachment(
         self, client, user_headers, draft_contract, db, admin_user
