@@ -1,0 +1,196 @@
+{
+  "version": "0.0.1",
+  "project": {
+    "name": "合同管理系统",
+    "slug": "contract-hub",
+    "description": "企业合同生命周期管理系统 MVP：用户管理、合同 CRUD（五态流转）、附件上传下载、角色权限控制",
+    "base_path": "/projects/contract-hub/",
+    "port": 19007,
+    "public_url": "http://120.24.117.67/projects/contract-hub/"
+  },
+  "architecture": {
+    "style": "SPA + REST API (单体部署)",
+    "description": "单 FastAPI 服务器同时承载 REST API 和编译后的 React SPA 静态资源。前端通过 React Router 实现客户端路由，后端通过 FastAPI 中间件统一处理 CORS、缓存头和静态资源版本令牌。数据层使用 SQLAlchemy ORM + SQLite，文件存储使用本地文件系统。",
+    "components": [
+      {
+        "name": "Frontend SPA",
+        "tech": "React 18 + Vite + TypeScript + Ant Design",
+        "role": "用户界面，客户端路由，API 调用，文件上传"
+      },
+      {
+        "name": "Backend API Server",
+        "tech": "FastAPI + Uvicorn",
+        "role": "REST API、认证鉴权、静态资源下发、Cache-Control 响应头"
+      },
+      {
+        "name": "Data Layer",
+        "tech": "SQLAlchemy 2.0 + SQLite",
+        "role": "ORM 映射、数据库迁移、种子数据"
+      },
+      {
+        "name": "File Storage",
+        "tech": "本地文件系统",
+        "role": "合同附件存储、类型校验（魔数检测）"
+      }
+    ],
+    "data_flow": "Browser → [Cache-Control: no-cache] → FastAPI StaticFiles → React SPA → fetch API → FastAPI Router → SQLAlchemy → SQLite"
+  },
+  "frontend_choice": {
+    "framework": "React 18",
+    "build_tool": "Vite 5",
+    "language": "TypeScript 5",
+    "ui_library": "Ant Design 5",
+    "routing": "React Router 6",
+    "http_client": "fetch API (native)",
+    "rationale": [
+      "Vite base 配置原生支持 /projects/contract-hub/ 子路径部署，无需后端 URL 重写",
+      "React Router v6 basename prop 自动处理客户端路由前缀，与 Vite base 一致",
+      "Vite 构建自动为 JS/CSS 资源添加 content hash；通过 experimental.renderBuiltUrl 可注入 ?v=0.0.1 版本令牌",
+      "TypeScript 类型系统与后端 Pydantic 模型对应，减少前后端接口不一致导致的集成缺陷",
+      "Ant Design 5 提供成熟的中文后台管理组件（表格、表单、上传、权限路由守卫），加速 MVP 开发",
+      "React 生态最大，后续迭代可扩展性强（状态管理、测试工具、SSR 等）",
+      "fetch API 零依赖，配合 TypeScript 泛型可实现类型安全的 API 调用层"
+    ],
+    "alternatives_considered": [
+      {
+        "option": "Vue 3 + Vite",
+        "reason_rejected": "同样支持 Vite base 配置，但生态系统（特别是中文后台组件库）不如 React + Ant Design 成熟"
+      },
+      {
+        "option": "Vanilla HTML/JS",
+        "reason_rejected": "缺乏组件化和路由支持，随着功能增长维护成本指数上升，不适合迭代演进"
+      }
+    ]
+  },
+  "data_model": {
+    "tables": [
+      {
+        "name": "users",
+        "columns": [
+          {"name": "id", "type": "INTEGER", "constraints": "PRIMARY KEY AUTOINCREMENT"},
+          {"name": "username", "type": "VARCHAR(50)", "constraints": "UNIQUE NOT NULL"},
+          {"name": "password_hash", "type": "VARCHAR(255)", "constraints": "NOT NULL"},
+          {"name": "role", "type": "VARCHAR(10)", "constraints": "NOT NULL CHECK(role IN ('admin','user'))"},
+          {"name": "created_at", "type": "DATETIME", "constraints": "NOT NULL DEFAULT CURRENT_TIMESTAMP"}
+        ]
+      },
+      {
+        "name": "contracts",
+        "columns": [
+          {"name": "id", "type": "INTEGER", "constraints": "PRIMARY KEY AUTOINCREMENT"},
+          {"name": "title", "type": "VARCHAR(200)", "constraints": "NOT NULL"},
+          {"name": "content", "type": "TEXT", "constraints": "NOT NULL DEFAULT ''"},
+          {"name": "status", "type": "VARCHAR(20)", "constraints": "NOT NULL DEFAULT 'draft' CHECK(status IN ('draft','pending_review','active','expired','terminated'))"},
+          {"name": "creator_id", "type": "INTEGER", "constraints": "NOT NULL REFERENCES users(id)"},
+          {"name": "created_at", "type": "DATETIME", "constraints": "NOT NULL DEFAULT CURRENT_TIMESTAMP"},
+          {"name": "updated_at", "type": "DATETIME", "constraints": "NOT NULL DEFAULT CURRENT_TIMESTAMP"}
+        ]
+      },
+      {
+        "name": "attachments",
+        "columns": [
+          {"name": "id", "type": "INTEGER", "constraints": "PRIMARY KEY AUTOINCREMENT"},
+          {"name": "filename", "type": "VARCHAR(255)", "constraints": "NOT NULL"},
+          {"name": "original_filename", "type": "VARCHAR(255)", "constraints": "NOT NULL"},
+          {"name": "file_path", "type": "VARCHAR(500)", "constraints": "NOT NULL"},
+          {"name": "file_type", "type": "VARCHAR(10)", "constraints": "NOT NULL CHECK(file_type IN ('pdf','doc','docx'))"},
+          {"name": "file_size", "type": "INTEGER", "constraints": "NOT NULL"},
+          {"name": "contract_id", "type": "INTEGER", "constraints": "NOT NULL REFERENCES contracts(id) ON DELETE CASCADE"},
+          {"name": "uploader_id", "type": "INTEGER", "constraints": "NOT NULL REFERENCES users(id)"},
+          {"name": "uploaded_at", "type": "DATETIME", "constraints": "NOT NULL DEFAULT CURRENT_TIMESTAMP"}
+        ]
+      }
+    ],
+    "state_machine": {
+      "entity": "Contract",
+      "states": ["draft", "pending_review", "active", "expired", "terminated"],
+      "transitions": [
+        {"from": "draft", "to": "pending_review", "trigger": "submit_for_review", "role": "admin/user"},
+        {"from": "pending_review", "to": "active", "trigger": "approve", "role": "admin"},
+        {"from": "pending_review", "to": "draft", "trigger": "reject", "role": "admin"},
+        {"from": "active", "to": "expired", "trigger": "auto_expire", "role": "system"},
+        {"from": "active", "to": "terminated", "trigger": "terminate", "role": "admin"},
+        {"from": "draft", "to": "terminated", "trigger": "cancel", "role": "admin/user"}
+      ]
+    }
+  },
+  "api_design": {
+    "prefix": "/projects/contract-hub/api",
+    "auth_scheme": "JWT Bearer Token (python-jose + passlib bcrypt)",
+    "endpoints": [
+      {"method": "POST", "path": "/auth/login", "description": "用户登录，返回 JWT access token"},
+      {"method": "POST", "path": "/auth/logout", "description": "用户登出（客户端清除 token）"},
+      {"method": "GET", "path": "/auth/me", "description": "获取当前登录用户信息"},
+      {"method": "GET", "path": "/users", "description": "用户列表（admin），支持分页"},
+      {"method": "POST", "path": "/users", "description": "创建用户（admin）"},
+      {"method": "GET", "path": "/users/{id}", "description": "用户详情（admin）"},
+      {"method": "PUT", "path": "/users/{id}", "description": "更新用户（admin）"},
+      {"method": "DELETE", "path": "/users/{id}", "description": "删除用户（admin）"},
+      {"method": "GET", "path": "/contracts", "description": "合同列表（按角色过滤：admin 全量，user 仅自己）"},
+      {"method": "POST", "path": "/contracts", "description": "创建合同"},
+      {"method": "GET", "path": "/contracts/{id}", "description": "合同详情"},
+      {"method": "PUT", "path": "/contracts/{id}", "description": "更新合同（draft 状态）"},
+      {"method": "DELETE", "path": "/contracts/{id}", "description": "删除合同（draft 状态）"},
+      {"method": "POST", "path": "/contracts/{id}/submit", "description": "提交审核（draft→pending_review）"},
+      {"method": "POST", "path": "/contracts/{id}/approve", "description": "审批通过（pending_review→active，admin）"},
+      {"method": "POST", "path": "/contracts/{id}/reject", "description": "驳回（pending_review→draft，admin）"},
+      {"method": "POST", "path": "/contracts/{id}/terminate", "description": "终止合同（active→terminated，admin）"},
+      {"method": "POST", "path": "/contracts/{id}/attachments", "description": "上传附件（类型校验 pdf/doc/docx）"},
+      {"method": "GET", "path": "/attachments/{id}", "description": "下载附件"},
+      {"method": "DELETE", "path": "/attachments/{id}", "description": "删除附件"}
+    ],
+    "static_files": {
+      "mount_path": "/projects/contract-hub/",
+      "source_dir": "frontend/dist/",
+      "cache_control": {
+        "html": "no-cache",
+        "assets": "public, max-age=31536000, immutable"
+      }
+    }
+  },
+  "deployment": {
+    "method": "单进程 FastAPI (uvicorn)",
+    "server": "aliyun-cowork",
+    "deploy_root": "/srv/codingagent/contract-hub",
+    "systemd_service": "codingagent-contract-hub",
+    "database": "SQLite 文件（deploy_root/contract_hub.db）",
+    "upload_dir": "deploy_root/uploads/",
+    "cache_strategy": {
+      "html_response_header": "Cache-Control: no-cache",
+      "static_asset_version_token": "?v=0.0.1",
+      "note": "HTML 缓存头由 FastAPI 中间件设置真实 HTTP 响应头，禁止使用 <meta> 标签"
+    }
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "category": "路由",
+      "description": "React Router basename 与 FastAPI StaticFiles mount_path 不一致导致 404",
+      "mitigation": "构建时验证 Vite base 与前端 Router basename 及后端 mount_path 三者一致，均使用 /projects/contract-hub/"
+    },
+    {
+      "id": "R2",
+      "category": "缓存",
+      "description": "Cache-Control 响应头未正确下发，Hermes 浏览器验收失败",
+      "mitigation": "FastAPI 中间件在 StaticFiles 之前拦截 .html 请求，显式设置 Cache-Control: no-cache 响应头；自测脚本用 curl -I 验证"
+    },
+    {
+      "id": "R3",
+      "category": "安全",
+      "description": "附件类型校验仅检查扩展名，攻击者可能上传恶意文件伪装成 pdf/doc",
+      "mitigation": "使用 python-magic 或 filetype 库检测文件魔数（magic bytes），双重校验扩展名+文件头"
+    },
+    {
+      "id": "R4",
+      "category": "并发",
+      "description": "SQLite 单写者限制，多用户并发写入可能触发 database locked 错误",
+      "mitigation": "MVP 阶段用户量小可接受；SQLAlchemy 连接池配置 check_same_thread=False + WAL 模式；后续迭代可迁移至 PostgreSQL"
+    },
+    {
+      "id": "R5",
+      "category": "认证",
+      "description": "JWT Token 存储在前端可能被 XSS 窃取",
+      "mitigation": "Token 存储在 httpOnly cookie 或内存中，配合 CSP 头；演示阶段风险可控，后续加强"
+    }
+  ]
+}
