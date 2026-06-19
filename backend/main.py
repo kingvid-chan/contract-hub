@@ -44,7 +44,7 @@ app.add_middleware(CacheControlMiddleware)
 
 @app.get(f"{BASE_PATH}/healthz")
 def healthz():
-    return {"status": "ok", "version": "0.0.2"}
+    return {"status": "ok", "version": "0.0.3"}
 
 
 # ── API routers ───────────────────────────────────────
