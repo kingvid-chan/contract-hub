@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 // Plugin to append ?v=0.0.1 version token to all asset URLs in built HTML
 function versionTokenPlugin(): Plugin {
-  const VERSION = "0.0.2";
+  const VERSION = "0.0.3";
   return {
     name: "version-token",
     enforce: "post",

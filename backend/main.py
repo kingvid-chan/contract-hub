@@ -22,7 +22,7 @@ from backend.routers import users, contracts, attachments
 
 app = FastAPI(
     title="Contract Hub",
-    version="0.0.2",
+    version="0.0.3",
     docs_url=f"{API_PREFIX}/docs",
     openapi_url=f"{API_PREFIX}/openapi.json",
 )
