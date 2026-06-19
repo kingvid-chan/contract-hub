@@ -265,12 +265,18 @@ export async function downloadAttachment(
 
   const blob = await res.blob();
   const objectUrl = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = objectUrl;
-  a.download = originalName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  // Revoke after a short delay to ensure the download starts
-  setTimeout(() => URL.revokeObjectURL(objectUrl), 100);
+
+  // Use hidden iframe to trigger download — more reliable than a.click()
+  // because setting iframe.src does not require a user-gesture context,
+  // which is lost after the async fetch/await chain.
+  const iframe = document.createElement("iframe");
+  iframe.style.display = "none";
+  iframe.src = objectUrl;
+  document.body.appendChild(iframe);
+
+  // Clean up after download starts (generous timeout for slow connections)
+  setTimeout(() => {
+    document.body.removeChild(iframe);
+    URL.revokeObjectURL(objectUrl);
+  }, 60_000);
 }
