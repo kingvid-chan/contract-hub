@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "verifier": "hermes",
+  "timestamp": "2026-06-19T08:08:00Z",
+  "verification_items": {
+    "pytest": {"status": "passed", "detail": "47/47 tests passed"},
+    "healthz": {"status": "passed", "detail": "GET /projects/contract-hub/healthz returns 200 with expected JSON"},
+    "auth": {"status": "passed", "detail": "admin/admin123, user/user123 login, wrong password 401, token parsing"},
+    "user_crud": {"status": "passed", "detail": "admin CRUD, user 403, duplicate username 409"},
+    "contract_state_machine": {"status": "passed", "detail": "draft→submit→pending_review→approve→active→terminate all verified"},
+    "attachments": {"status": "passed", "detail": "PDF upload, download, delete, exe disguised as pdf rejected"},
+    "cache_headers": {"status": "passed", "detail": "HTML: no-cache, JS: public max-age=31536000, API: no-store"},
+    "seed_data": {"status": "passed", "detail": "admin+user accounts, 5 sample contracts"}
+  },
+  "issues_found": {
+    "smoke_sh": {"severity": "minor", "detail": "test/smoke.sh has token interpolation bug in AUTH variable, requires fix before deployment smoke test"},
+    "architecture_doc": {"severity": "minor", "detail": "docs/architecture.md has structural differences from actual code layout (file naming, directory structure), cosmetic only"}
+  },
+  "overall": "PASSED"
+}

@@ -1,0 +1,14 @@
+=== Health Check: contract-hub 0.0.1 ===
+Date: 2026-06-19T08:22:00Z
+Public URL: http://120.24.117.67/projects/contract-hub/
+
+--- HTTP redirect (followed) ---
+HTTP code: 200
+Final URL: https://120.24.117.67/projects/contract-hub/
+
+--- Health endpoint ---
+HTTP code: 200
+Response: {"status":"ok","version":"0.0.1"}
+
+--- Systemd ---
+codingagent-contract-hub: active

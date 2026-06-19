@@ -1,0 +1,20 @@
+=== Deploy Evidence: contract-hub 0.0.1 ===
+Date: 2026-06-19T08:21:21Z
+Release commit: 08a5acdd70266944fa86822cb9a1cf4a3aff5067
+Server: aliyun-cowork (120.24.117.67)
+Port: 19007
+Service: codingagent-contract-hub
+
+--- Local Health ---
+{"status":"ok","version":"0.0.1"}
+
+--- Public URL ---
+HTTP https://120.24.117.67/projects/contract-hub/: 200
+HTTP https://120.24.117.67/projects/contract-hub/healthz: 200
+
+--- Systemd ---
+Active: active
+
+--- Nginx Test ---
+nginx: configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
