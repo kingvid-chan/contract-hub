@@ -494,6 +494,125 @@ class TestAttachments:
         )
         assert get_resp.status_code == 404
 
+    def test_user_can_download_own_attachment(self, client, user_headers, regular_user, db):
+        """Regular user can download attachment from their own contract."""
+        from backend.models import Contract, Attachment
+        import os
+        import uuid
+
+        # Create a contract owned by the regular user
+        c = Contract(
+            title="User Contract", description="", status="draft",
+            creator_id=regular_user.id,
+        )
+        db.add(c)
+        db.commit()
+        db.refresh(c)
+
+        # Create a minimal PDF attachment on disk
+        pdf_content = (
+            b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n"
+            b"xref\n0 1\n0000000000 65535 f \ntrailer\n<< /Size 1 /Root 1 0 R >>\nstartxref\n9\n%%EOF"
+        )
+        from backend.config import UPLOAD_DIR
+        safe_name = f"{uuid.uuid4().hex}.pdf"
+        file_path = os.path.join(UPLOAD_DIR, safe_name)
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        with open(file_path, "wb") as f:
+            f.write(pdf_content)
+
+        att = Attachment(
+            filename=safe_name,
+            original_name="user-test.pdf",
+            file_path=file_path,
+            file_size=len(pdf_content),
+            content_type="application/pdf",
+            contract_id=c.id,
+            uploader_id=regular_user.id,
+        )
+        db.add(att)
+        db.commit()
+        db.refresh(att)
+
+        # User downloads their own attachment
+        resp = client.get(
+            f"{API}/attachments/{att.id}", headers=user_headers
+        )
+        assert resp.status_code == 200
+        assert resp.headers.get("content-type") == "application/pdf"
+
+    def test_user_cannot_download_others_attachment(
+        self, client, user_headers, draft_contract, db, admin_user
+    ):
+        """Regular user cannot download attachment from admin's contract."""
+        from backend.models import Attachment
+        import os
+        import uuid
+
+        pdf_content = (
+            b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n"
+            b"xref\n0 1\n0000000000 65535 f \ntrailer\n<< /Size 1 /Root 1 0 R >>\nstartxref\n9\n%%EOF"
+        )
+        from backend.config import UPLOAD_DIR
+        safe_name = f"{uuid.uuid4().hex}.pdf"
+        file_path = os.path.join(UPLOAD_DIR, safe_name)
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        with open(file_path, "wb") as f:
+            f.write(pdf_content)
+
+        att = Attachment(
+            filename=safe_name,
+            original_name="admin-test.pdf",
+            file_path=file_path,
+            file_size=len(pdf_content),
+            content_type="application/pdf",
+            contract_id=draft_contract.id,
+            uploader_id=admin_user.id,
+        )
+        db.add(att)
+        db.commit()
+        db.refresh(att)
+
+        # Regular user tries to download admin's attachment
+        resp = client.get(
+            f"{API}/attachments/{att.id}", headers=user_headers
+        )
+        assert resp.status_code == 404
+
+    def test_download_unauthenticated(self, client, draft_contract, db, admin_user):
+        """Unauthenticated download request returns 401."""
+        from backend.models import Attachment
+        import os
+        import uuid
+
+        pdf_content = (
+            b"%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n"
+            b"xref\n0 1\n0000000000 65535 f \ntrailer\n<< /Size 1 /Root 1 0 R >>\nstartxref\n9\n%%EOF"
+        )
+        from backend.config import UPLOAD_DIR
+        safe_name = f"{uuid.uuid4().hex}.pdf"
+        file_path = os.path.join(UPLOAD_DIR, safe_name)
+        os.makedirs(UPLOAD_DIR, exist_ok=True)
+        with open(file_path, "wb") as f:
+            f.write(pdf_content)
+
+        att = Attachment(
+            filename=safe_name,
+            original_name="noauth-test.pdf",
+            file_path=file_path,
+            file_size=len(pdf_content),
+            content_type="application/pdf",
+            contract_id=draft_contract.id,
+            uploader_id=admin_user.id,
+        )
+        db.add(att)
+        db.commit()
+        db.refresh(att)
+
+        # No auth header
+        resp = client.get(f"{API}/attachments/{att.id}")
+        assert resp.status_code == 401
+
 
 # ── Cache-Control headers ───────────────────────────
 
