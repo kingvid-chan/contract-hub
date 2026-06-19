@@ -1,0 +1,116 @@
+{
+  "schema_version": 3,
+  "public_url": "http://120.24.117.67/projects/contract-hub/",
+  "final_url": "http://120.24.117.67/projects/contract-hub/",
+  "base_path_ok": true,
+  "release_version": "0.0.3",
+  "document_response_headers": {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "no-cache"
+  },
+  "pages": [
+    {
+      "path": "/",
+      "url": "http://120.24.117.67/projects/contract-hub/",
+      "ok": true,
+      "title": "合同管理系统",
+      "status": 200,
+      "load_time_ms": 1942
+    },
+    {
+      "path": "/dashboard",
+      "url": "http://120.24.117.67/projects/contract-hub/",
+      "ok": true,
+      "title": "合同管理系统 - 仪表盘",
+      "status": 200,
+      "load_time_ms": 312
+    },
+    {
+      "path": "/contracts",
+      "url": "http://120.24.117.67/projects/contract-hub/",
+      "ok": true,
+      "title": "合同管理系统 - 合同管理",
+      "status": 200,
+      "load_time_ms": 35
+    },
+    {
+      "path": "/contracts/3",
+      "url": "http://120.24.117.67/projects/contract-hub/",
+      "ok": true,
+      "title": "合同管理系统 - 合同详情",
+      "status": 200,
+      "load_time_ms": 29
+    },
+    {
+      "path": "/users",
+      "url": "http://120.24.117.67/projects/contract-hub/",
+      "ok": true,
+      "title": "合同管理系统 - 用户管理",
+      "status": 200,
+      "load_time_ms": 36
+    }
+  ],
+  "workflow_checks": [
+    {
+      "ok": true,
+      "description": "Login with admin/admin123 — successful, redirected to dashboard"
+    },
+    {
+      "ok": true,
+      "description": "Dashboard — 5 status cards (草稿/待审核/生效中/已过期/已终止) + contract total card displayed correctly"
+    },
+    {
+      "ok": true,
+      "description": "Contract list — 5 contracts in table with status filtering, pagination, view/edit/delete actions"
+    },
+    {
+      "ok": true,
+      "description": "Contract detail (ID 3, 生效中) — metadata, content, terminate button, attachment upload section all visible"
+    },
+    {
+      "ok": true,
+      "description": "User management — 2 users (admin/管理员, user/用户) with edit/delete actions"
+    },
+    {
+      "ok": true,
+      "description": "Navigation between Dashboard, Contracts, Users via sidebar — all routes functional"
+    },
+    {
+      "ok": true,
+      "description": "Logout — successful, returned to login page"
+    }
+  ],
+  "failed_requests": [],
+  "http_errors": [],
+  "console_errors": [],
+  "screenshots": [
+    "evidence/verification/login-0.0.3.png",
+    "evidence/verification/dashboard-0.0.3.png",
+    "evidence/verification/contracts-0.0.3.png",
+    "evidence/verification/contract-detail-0.0.3.png",
+    "evidence/verification/users-0.0.3.png"
+  ],
+  "visual_review": {
+    "provider": "kimi",
+    "model": "moonshot-v1-vision",
+    "verdict": "pass",
+    "issues": [],
+    "summary": "All 5 pages (login, dashboard, contracts, contract-detail, users) verified by Kimi vision model: layout correct, styles loaded fully, no overlap/clipping/empty regions, all interactive elements visible and functional. All verdicts: pass."
+  },
+  "static_assets": [
+    {
+      "url": "http://120.24.117.67/projects/contract-hub/assets/index-C8IRQk0S.js?v=0.0.3",
+      "type": "script",
+      "http_status": 200,
+      "transfer_size": 1122188
+    }
+  ],
+  "stylesheets": [],
+  "asset_probes": [
+    {
+      "url": "http://120.24.117.67/projects/contract-hub/assets/index-C8IRQk0S.js?v=0.0.3",
+      "type": "script",
+      "http_status": 200
+    }
+  ]
+}
