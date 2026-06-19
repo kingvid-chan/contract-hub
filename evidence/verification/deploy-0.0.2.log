@@ -1,0 +1,6 @@
+{"status":"ok","version":"0.0.2"}
+● codingagent-contract-hub.service - CodingAgent contract-hub
+     Loaded: loaded (/etc/systemd/system/codingagent-contract-hub.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-06-19 16:47:14 CST; 15s ago
+   Main PID: 981708 (uvicorn)
+      Tasks: 7 (limit: 4124)
