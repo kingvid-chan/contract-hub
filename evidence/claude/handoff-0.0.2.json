@@ -1,0 +1,26 @@
+{
+  "version": "0.0.2",
+  "ready_for_verification": true,
+  "tests_passed": "50/50",
+  "files_changed": 10,
+  "bug_fixed": "attachment-download-401",
+  "root_cause": "Download button used direct href to API URL without Bearer token — browser new tab navigation does not carry in-memory JWT",
+  "fix": "Added downloadAttachment() helper in api.ts using fetch+token to get blob, create object URL, and trigger download via temporary <a> element. Replaced href with onClick in ContractDetailPage.tsx.",
+  "backend_verified": true,
+  "backend_auth_logic": "No changes needed — admin can download any attachment, user can download own contract's attachments, unauthenticated returns 401",
+  "frontend_verified": true,
+  "version_bumped": "0.0.1 → 0.0.2 across all references (config, main, vite, login, package.json, tests, smoke)",
+  "tests_added": [
+    "test_user_can_download_own_attachment",
+    "test_user_cannot_download_others_attachment",
+    "test_download_unauthenticated"
+  ],
+  "commits": [
+    "2196b9a test: add attachment download auth tests for 0.0.2",
+    "54dd76f feat: add downloadAttachment helper with token-bearing fetch",
+    "dd5cb5b fix: replace direct href download with token-bearing onClick",
+    "8803dff chore: bump version from 0.0.1 to 0.0.2"
+  ],
+  "known_issues": [],
+  "notes": "Attachment download 401 bug fixed. The downloadAttachment() pattern is reusable for any future authenticated file downloads."
+}

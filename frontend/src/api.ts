@@ -241,3 +241,36 @@ export async function uploadAttachment(
 export async function deleteAttachment(id: number): Promise<void> {
   return api(`/attachments/${id}`, { method: "DELETE" });
 }
+
+export async function downloadAttachment(
+  id: number,
+  originalName: string
+): Promise<void> {
+  const url = `${BASE}/attachments/${id}`;
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(url, { headers });
+
+  if (res.status === 401) {
+    setToken(null);
+  }
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new ApiError(res.status, data.detail || res.statusText);
+  }
+
+  const blob = await res.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = objectUrl;
+  a.download = originalName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  // Revoke after a short delay to ensure the download starts
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 100);
+}

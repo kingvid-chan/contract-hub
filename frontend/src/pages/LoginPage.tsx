@@ -51,7 +51,7 @@ export default function LoginPage() {
             <Title level={3} style={{ marginBottom: 4 }}>
               合同管理系统
             </Title>
-            <span style={{ color: "#999" }}>Contract Hub v0.0.1</span>
+            <span style={{ color: "#999" }}>Contract Hub v0.0.2</span>
           </div>
           <Form
             name="login"

@@ -22,7 +22,7 @@ from backend.routers import users, contracts, attachments
 
 app = FastAPI(
     title="Contract Hub",
-    version="0.0.1",
+    version="0.0.2",
     docs_url=f"{API_PREFIX}/docs",
     openapi_url=f"{API_PREFIX}/openapi.json",
 )
@@ -44,7 +44,7 @@ app.add_middleware(CacheControlMiddleware)
 
 @app.get(f"{BASE_PATH}/healthz")
 def healthz():
-    return {"status": "ok", "version": "0.0.1"}
+    return {"status": "ok", "version": "0.0.2"}
 
 
 # ── API routers ───────────────────────────────────────
