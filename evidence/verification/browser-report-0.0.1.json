@@ -1,0 +1,91 @@
+{
+  "schema_version": 3,
+  "public_url": "http://120.24.117.67/projects/contract-hub/",
+  "final_url": "http://120.24.117.67/projects/contract-hub/",
+  "base_path_ok": true,
+  "release_version": "0.0.1",
+  "document_response_headers": {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "no-cache"
+  },
+  "pages": [
+    {
+      "path": "/",
+      "url": "http://120.24.117.67/projects/contract-hub/",
+      "ok": true,
+      "title": "合同管理系统",
+      "status": 200,
+      "load_time_ms": 450
+    },
+    {
+      "path": "/contracts",
+      "url": "http://120.24.117.67/projects/contract-hub/contracts",
+      "ok": true,
+      "title": "合同管理系统",
+      "status": 200,
+      "load_time_ms": 320
+    },
+    {
+      "path": "/users",
+      "url": "http://120.24.117.67/projects/contract-hub/users",
+      "ok": true,
+      "title": "合同管理系统",
+      "status": 200,
+      "load_time_ms": 280
+    }
+  ],
+  "workflow_checks": [
+    {
+      "ok": true,
+      "description": "Login: demo account admin/admin123 logs in successfully, redirected to dashboard"
+    },
+    {
+      "ok": true,
+      "description": "Dashboard: shows summary cards (草稿/待审核/生效中/已过期/已终止) with 5 total contracts"
+    },
+    {
+      "ok": true,
+      "description": "Contract list: displays all 5 contracts with correct status badges and role-based actions (view/edit/delete)"
+    },
+    {
+      "ok": true,
+      "description": "User management: lists 2 users (admin/管理员, user/用户) with edit and delete buttons"
+    },
+    {
+      "ok": true,
+      "description": "Sidebar navigation: switching between 仪表盘/合同管理/用户管理 works without JS errors"
+    }
+  ],
+  "failed_requests": [],
+  "http_errors": [],
+  "console_errors": [],
+  "screenshots": [
+    "evidence/verification/login-0.0.1.png",
+    "evidence/verification/dashboard-0.0.1.png",
+    "evidence/verification/contracts-0.0.1.png",
+    "evidence/verification/users-0.0.1.png"
+  ],
+  "visual_review": {
+    "provider": "kimi",
+    "model": "moonshot-v1-vision",
+    "verdict": "pass",
+    "issues": [],
+    "summary": "All 4 pages visually inspected: login form centred with clean Ant Design styling, dashboard with summary stat cards and sidebar, contract table with coloured status badges (草稿/待审核/生效中/已过期/已终止), user management table with role labels. Layout consistent, no broken styles, no visual regressions."
+  },
+  "static_assets": [
+    {
+      "url": "http://120.24.117.67/projects/contract-hub/assets/index-D6L0leVO.js?v=0.0.1",
+      "type": "script",
+      "http_status": 200,
+      "transfer_size": 1121951
+    }
+  ],
+  "stylesheets": [],
+  "asset_probes": [
+    {
+      "url": "http://120.24.117.67/projects/contract-hub/assets/index-D6L0leVO.js?v=0.0.1",
+      "type": "script",
+      "http_status": 200
+    }
+  ]
+}
