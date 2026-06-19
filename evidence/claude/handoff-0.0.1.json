@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "ready_for_verification": true,
+  "tests_passed": "47/47",
+  "files_changed": 30,
+  "tasks_completed": ["4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"],
+  "backend_verified": true,
+  "frontend_verified": true,
+  "integration_verified": true,
+  "startup_command": "cd /path/to/project && uvicorn backend.main:app --host 0.0.0.0 --port 19007",
+  "known_issues": [],
+  "notes": "Full MVP implementation complete. 47/47 tests passing. Backend: FastAPI+SQLAlchemy+SQLite. Frontend: React 18+Vite 5+TypeScript 5+Ant Design 5. Auth with JWT+bcrypt. Contract state machine (5 states). Attachment upload with magic number detection. Demo accounts: admin/admin123, user/user123."
+}

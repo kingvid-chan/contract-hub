@@ -9,3 +9,9 @@ node_modules/
 dist/
 process-log/
 .paused
+*.db
+*.db-wal
+*.db-shm
+uploads/
+.pytest_cache/
+dist/
