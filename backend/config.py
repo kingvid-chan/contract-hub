@@ -36,4 +36,4 @@ HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", "19007"))
 
 # Version token for static assets
-VERSION_TOKEN = "0.0.1"
+VERSION_TOKEN = "0.0.2"

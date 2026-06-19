@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Smoke test for contract-hub 0.0.1
+# Smoke test for contract-hub 0.0.2
 # Verifies: healthz → login → CRUD contracts → upload/download attachments → Cache-Control headers
 set -euo pipefail
 
