@@ -1,0 +1,81 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.15, pytest-8.4.2, pluggy-1.6.0 -- /Users/cqw/外部需求/.conda/codingagent/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/cqw/外部需求/proj-d9ec29
+plugins: anyio-4.14.0, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 47 items
+
+tests/test_api.py::TestHealth::test_healthz PASSED                       [  2%]
+tests/test_api.py::TestAuth::test_login_admin PASSED                     [  4%]
+tests/test_api.py::TestAuth::test_login_user PASSED                      [  6%]
+tests/test_api.py::TestAuth::test_login_wrong_password PASSED            [  8%]
+tests/test_api.py::TestAuth::test_login_nonexistent_user PASSED          [ 10%]
+tests/test_api.py::TestAuth::test_me_authenticated PASSED                [ 12%]
+tests/test_api.py::TestAuth::test_me_unauthenticated PASSED              [ 14%]
+tests/test_api.py::TestAuth::test_me_invalid_token PASSED                [ 17%]
+tests/test_api.py::TestUsers::test_list_users_admin PASSED               [ 19%]
+tests/test_api.py::TestUsers::test_list_users_forbidden PASSED           [ 21%]
+tests/test_api.py::TestUsers::test_create_user_admin PASSED              [ 23%]
+tests/test_api.py::TestUsers::test_create_duplicate_username PASSED      [ 25%]
+tests/test_api.py::TestUsers::test_create_user_short_password PASSED     [ 27%]
+tests/test_api.py::TestUsers::test_get_user_admin PASSED                 [ 29%]
+tests/test_api.py::TestUsers::test_get_nonexistent_user PASSED           [ 31%]
+tests/test_api.py::TestUsers::test_update_user_admin PASSED              [ 34%]
+tests/test_api.py::TestUsers::test_delete_user_admin PASSED              [ 36%]
+tests/test_api.py::TestUsers::test_user_cannot_access_users PASSED       [ 38%]
+tests/test_api.py::TestContracts::test_list_contracts_admin PASSED       [ 40%]
+tests/test_api.py::TestContracts::test_list_contracts_filter_status PASSED [ 42%]
+tests/test_api.py::TestContracts::test_user_sees_only_own_contracts PASSED [ 44%]
+tests/test_api.py::TestContracts::test_create_contract PASSED            [ 46%]
+tests/test_api.py::TestContracts::test_get_contract PASSED               [ 48%]
+tests/test_api.py::TestContracts::test_get_nonexistent_contract PASSED   [ 51%]
+tests/test_api.py::TestContracts::test_user_cannot_see_others_contract PASSED [ 53%]
+tests/test_api.py::TestContracts::test_update_draft_contract PASSED      [ 55%]
+tests/test_api.py::TestContracts::test_cannot_update_non_draft PASSED    [ 57%]
+tests/test_api.py::TestContracts::test_delete_draft_contract PASSED      [ 59%]
+tests/test_api.py::TestContracts::test_cannot_delete_non_draft PASSED    [ 61%]
+tests/test_api.py::TestStateMachine::test_submit_draft_to_pending PASSED [ 63%]
+tests/test_api.py::TestStateMachine::test_approve_pending_to_active PASSED [ 65%]
+tests/test_api.py::TestStateMachine::test_reject_pending_to_draft PASSED [ 68%]
+tests/test_api.py::TestStateMachine::test_terminate_active_to_terminated PASSED [ 70%]
+tests/test_api.py::TestStateMachine::test_non_admin_cannot_approve PASSED [ 72%]
+tests/test_api.py::TestStateMachine::test_invalid_transition_approve_draft PASSED [ 74%]
+tests/test_api.py::TestStateMachine::test_invalid_transition_submit_active PASSED [ 76%]
+tests/test_api.py::TestStateMachine::test_full_happy_path PASSED         [ 78%]
+tests/test_api.py::TestStateMachine::test_submit_own_contract PASSED     [ 80%]
+tests/test_api.py::TestAttachments::test_upload_pdf PASSED               [ 82%]
+tests/test_api.py::TestAttachments::test_upload_docx PASSED              [ 85%]
+tests/test_api.py::TestAttachments::test_reject_exe_disguised_as_pdf PASSED [ 87%]
+tests/test_api.py::TestAttachments::test_reject_bad_extension PASSED     [ 89%]
+tests/test_api.py::TestAttachments::test_download_attachment PASSED      [ 91%]
+tests/test_api.py::TestAttachments::test_delete_attachment PASSED        [ 93%]
+tests/test_api.py::TestCacheHeaders::test_html_no_cache PASSED           [ 95%]
+tests/test_api.py::TestCacheHeaders::test_api_no_store PASSED            [ 97%]
+tests/test_api.py::TestCacheHeaders::test_js_long_cache PASSED           [100%]
+
+=============================== warnings summary ===============================
+../.conda/codingagent/lib/python3.11/site-packages/passlib/utils/__init__.py:854
+  /Users/cqw/外部需求/.conda/codingagent/lib/python3.11/site-packages/passlib/utils/__init__.py:854: DeprecationWarning: 'crypt' is deprecated and slated for removal in Python 3.13
+    from crypt import crypt as _crypt
+
+backend/main.py:91
+  /Users/cqw/外部需求/proj-d9ec29/backend/main.py:91: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    @app.on_event("startup")
+
+../.conda/codingagent/lib/python3.11/site-packages/fastapi/applications.py:4495
+  /Users/cqw/外部需求/.conda/codingagent/lib/python3.11/site-packages/fastapi/applications.py:4495: DeprecationWarning: 
+          on_event is deprecated, use lifespan event handlers instead.
+  
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+          
+    return self.router.on_event(event_type)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 47 passed, 3 warnings in 15.80s ========================
